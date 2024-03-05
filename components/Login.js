@@ -36,7 +36,7 @@ const Login = () => {
     setTimeout(() => {
       setRefreshing(false);
       setIsPressed(false);
-    }, 2000);
+    }, 1200);
   };
 
   const togglePasswordVisibility = () => {
@@ -72,7 +72,8 @@ const Login = () => {
         console.log(JSON.stringify(res));
         Alert.alert('User Logged In');
         saveUserSession();
-        navigation.navigate('HomeUI');
+        // navigation.navigate('HomeUI');
+        navigation.navigate('BottomTab');
       })
       .catch(error => {
         if (error.code === 'auth/invalid-credential') {

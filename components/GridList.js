@@ -74,23 +74,21 @@ const GridList = () => {
     }).start();
   };
 
-  const handlePressOut = item => () => {
+  const handlePressOutx = item => () => {
     Animated.timing(fadeAnimation, {
       toValue: 1,
       duration: 200,
       useNativeDriver: false,
     }).start();
-    navigation.navigate('AnimatedScreen', {item});
+    navigation.navigate('TopTabBar', {item});
   };
 
   const renderItem = ({item}) => {
     return (
       <TouchableOpacity
-        onPress={() => {
-          console.log('Item:', item.title, 'Images:', item.imageUrl);
-        }}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut(item)}
+        onPress={handlePressOutx(item)}
+        // onPressIn={handlePressIn}
+        // onPressOut={handlePressOut(item)}
         style={[
           styles.item,
           {
@@ -134,33 +132,6 @@ const GridList = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleLogoutPress}>
-        <Neomorph
-          inner={isPressed}
-          swapShadows={isPressed}
-          style={{
-            shadowRadius: 5,
-            borderRadius: 10,
-            backgroundColor: '#EAEAEA',
-            width: 100,
-            height: 40,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginLeft: 240,
-            marginTop: 10,
-            marginBottom: 20,
-          }}>
-          <Text
-            style={{
-              fontSize: 15,
-              fontWeight: 'bold',
-              color: 'red',
-              textDecorationLine: 'underline',
-            }}>
-            Logout
-          </Text>
-        </Neomorph>
-      </TouchableOpacity>
       <FlatList
         data={data}
         showsVerticalScrollIndicator={false}

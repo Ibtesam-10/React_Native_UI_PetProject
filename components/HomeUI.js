@@ -16,6 +16,7 @@ import React, {useState} from 'react';
 import {
   car1,
   car2,
+  eye,
   img1,
   img2,
   img3,
@@ -30,6 +31,7 @@ import {useRef} from 'react';
 import {Neomorph} from 'react-native-neomorph-shadows';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
+import Header from './Header';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -199,95 +201,177 @@ const HomeUI = () => {
   };
 
   return (
-    <View style={{flex: 1}}>
-      <ImageBackground
-        source={img1}
-        style={styles.backgroundImageStyle}
-        resizeMode="cover">
-        <ScrollView
-          contentContainerStyle={styles.container}
-          keyboardShouldPersistTaps="handled"
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor="transparent"
-            />
-          }>
-          <View style={styles.sectionContainer}>
-            <TouchableOpacity onPress={handleLogoutPress}>
-              <Neomorph
-                inner={isPressed}
-                swapShadows={isPressed}
-                style={styles.logoutBtnStyle}>
-                <Text style={styles.logoutText}>Logout</Text>
-              </Neomorph>
-            </TouchableOpacity>
-            <View style={styles.containerCarousel}>
-              <Carousel
-                enableMomentum={true}
-                enableSnap={true}
-                lockScrollWhileSnapping={true}
-                loop={true}
-                layout={'default'}
-                data={carouselData}
-                renderItem={renderCarouselItem}
-                sliderWidth={Dimensions.get('window').width}
-                itemWidth={Dimensions.get('window').width}
-                autoplay={true}
-                autoplayInterval={3000}
-                onSnapToItem={index => setActiveSlide(index)}
-              />
-              <Pagination
-                dotsLength={carouselData.length}
-                activeDotIndex={activeSlide}
-                containerStyle={{top: -10}}
-                dotStyle={styles.dotStyle}
-                inactiveDotOpacity={0.4}
-                inactiveDotScale={0.6}
-              />
-            </View>
-            <View style={styles.textStyle}>
-              <Text style={styles.textAlign}>Recommended</Text>
-              <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
-            </View>
-            <FlatList
-              data={iconsData}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.scrollContainer}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => <ListData {...item} />}
-            />
-            <View style={styles.textStyle}>
-              <Text style={[styles.textAlign]}>Categories</Text>
-              <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
-            </View>
-            <FlatList
-              data={categoriesData}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.scrollContainer}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => <CategoriesData {...item} />}
-            />
-          </View>
-          <View style={styles.textStyle}>
-            <Text style={[styles.textAlign]}>Grid View Data</Text>
-            <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
-          </View>
-          <FlatList
-            data={gridViewList}
-            showsVerticalScrollIndicator={false}
-            style={styles.grdiViewListStyle}
-            columnWrapperStyle={styles.row}
-            renderItem={({item}) => <GridViewData {...item} />}
-            keyExtractor={item => item.id}
-            numColumns={2}
+    // <View style={{flex: 1}}>
+    //   <ImageBackground
+    //     source={img1}
+    //     style={styles.backgroundImageStyle}
+    //     resizeMode="cover">
+    //     <ScrollView
+    //       contentContainerStyle={styles.container}
+    //       keyboardShouldPersistTaps="handled"
+    //       refreshControl={
+    //         <RefreshControl
+    //           refreshing={refreshing}
+    //           onRefresh={onRefresh}
+    //           tintColor="transparent"
+    //         />
+    //       }>
+    //       <View style={styles.sectionContainer}>
+    //         <TouchableOpacity onPress={handleLogoutPress}>
+    //           <Neomorph
+    //             inner={isPressed}
+    //             swapShadows={isPressed}
+    //             style={styles.logoutBtnStyle}>
+    //             <Text style={styles.logoutText}>Logout</Text>
+    //           </Neomorph>
+    //         </TouchableOpacity>
+    //         <View style={styles.containerCarousel}>
+    //           <Carousel
+    //             enableMomentum={true}
+    //             enableSnap={true}
+    //             lockScrollWhileSnapping={true}
+    //             loop={true}
+    //             layout={'default'}
+    //             data={carouselData}
+    //             renderItem={renderCarouselItem}
+    //             sliderWidth={Dimensions.get('window').width}
+    //             itemWidth={Dimensions.get('window').width}
+    //             autoplay={true}
+    //             autoplayInterval={3000}
+    //             onSnapToItem={index => setActiveSlide(index)}
+    //           />
+    //           <Pagination
+    //             dotsLength={carouselData.length}
+    //             activeDotIndex={activeSlide}
+    //             containerStyle={{top: -10}}
+    //             dotStyle={styles.dotStyle}
+    //             inactiveDotOpacity={0.4}
+    //             inactiveDotScale={0.6}
+    //           />
+    //         </View>
+    //         <View style={styles.textStyle}>
+    //           <Text style={styles.textAlign}>Recommended</Text>
+    //           <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
+    //         </View>
+    //         <FlatList
+    //           data={iconsData}
+    //           horizontal
+    //           showsHorizontalScrollIndicator={false}
+    //           contentContainerStyle={styles.scrollContainer}
+    //           keyExtractor={(item, index) => index.toString()}
+    //           renderItem={({item}) => <ListData {...item} />}
+    //         />
+    //         <View style={styles.textStyle}>
+    //           <Text style={[styles.textAlign]}>Categories</Text>
+    //           <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
+    //         </View>
+    //         <FlatList
+    //           data={categoriesData}
+    //           horizontal
+    //           showsHorizontalScrollIndicator={false}
+    //           contentContainerStyle={styles.scrollContainer}
+    //           keyExtractor={(item, index) => index.toString()}
+    //           renderItem={({item}) => <CategoriesData {...item} />}
+    //         />
+    //       </View>
+    //       <View style={styles.textStyle}>
+    //         <Text style={[styles.textAlign]}>Grid View Data</Text>
+    //         <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
+    //       </View>
+    //       <FlatList
+    //         data={gridViewList}
+    //         showsVerticalScrollIndicator={false}
+    //         style={styles.grdiViewListStyle}
+    //         columnWrapperStyle={styles.row}
+    //         renderItem={({item}) => <GridViewData {...item} />}
+    //         keyExtractor={item => item.id}
+    //         numColumns={2}
+    //       />
+    //     </ScrollView>
+    //   </ImageBackground>
+    // </View>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          tintColor="transparent"
+        />
+      }>
+      <View style={styles.sectionContainer}>
+        <TouchableOpacity onPress={handleLogoutPress}>
+          <Neomorph
+            inner={isPressed}
+            swapShadows={isPressed}
+            style={styles.logoutBtnStyle}>
+            <Text style={styles.logoutText}>Logout</Text>
+          </Neomorph>
+        </TouchableOpacity>
+        <View style={styles.containerCarousel}>
+          <Carousel
+            enableMomentum={true}
+            enableSnap={true}
+            lockScrollWhileSnapping={true}
+            loop={true}
+            layout={'default'}
+            data={carouselData}
+            renderItem={renderCarouselItem}
+            sliderWidth={Dimensions.get('window').width}
+            itemWidth={Dimensions.get('window').width}
+            autoplay={true}
+            autoplayInterval={3000}
+            onSnapToItem={index => setActiveSlide(index)}
           />
-        </ScrollView>
-      </ImageBackground>
-    </View>
+          <Pagination
+            dotsLength={carouselData.length}
+            activeDotIndex={activeSlide}
+            containerStyle={{top: -10}}
+            dotStyle={styles.dotStyle}
+            inactiveDotOpacity={0.4}
+            inactiveDotScale={0.6}
+          />
+        </View>
+        <View style={styles.textStyle}>
+          <Text style={styles.textAlign}>Recommended</Text>
+          <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
+        </View>
+        <FlatList
+          data={iconsData}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContainer}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) => <ListData {...item} />}
+        />
+        <View style={styles.textStyle}>
+          <Text style={[styles.textAlign]}>Categories</Text>
+          <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
+        </View>
+        <FlatList
+          data={categoriesData}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContainer}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) => <CategoriesData {...item} />}
+        />
+      </View>
+      <View style={styles.textStyle}>
+        <Text style={[styles.textAlign]}>Grid View Data</Text>
+        <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
+      </View>
+      <FlatList
+        data={gridViewList}
+        showsVerticalScrollIndicator={false}
+        style={styles.grdiViewListStyle}
+        columnWrapperStyle={styles.row}
+        renderItem={({item}) => <GridViewData {...item} />}
+        keyExtractor={item => item.id}
+        numColumns={2}
+      />
+    </ScrollView>
   );
 };
 
@@ -297,7 +381,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 3,
     height: '100%',
-    // backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff',
   },
   containerCarousel: {
     justifyContent: 'center',
