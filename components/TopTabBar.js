@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable react/no-unstable-nested-components */
 import {Image, StyleSheet, Text, View, useWindowDimensions} from 'react-native';
 import React from 'react';
 import {SceneMap, TabBar, TabView} from 'react-native-tab-view';
@@ -45,7 +47,7 @@ const TopTabBar = ({route}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
+    <View style={styles.tabViewStyle}>
       <TabView
         swipeEnabled={true}
         navigationState={{index, routes}}
@@ -91,5 +93,9 @@ const styles = StyleSheet.create({
   indicatorStyle: {
     backgroundColor: 'red',
     marginBottom: -2,
+  },
+  tabViewStyle: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
 });

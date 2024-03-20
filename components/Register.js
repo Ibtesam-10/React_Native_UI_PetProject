@@ -75,6 +75,7 @@ const Register = () => {
         <Image source={signup} style={styles.itemImage} />
         <TextInput
           placeholder="Enter Email"
+          placeholderTextColor={'black'}
           value={email}
           onChangeText={txt => setEmail(txt)}
           style={{
@@ -89,6 +90,7 @@ const Register = () => {
         <View style={styles.passwordContainer}>
           <TextInput
             placeholder="Enter Password"
+            placeholderTextColor={'black'}
             value={password}
             onChangeText={txt => setPassword(txt)}
             secureTextEntry={hidePassword}

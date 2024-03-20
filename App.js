@@ -20,6 +20,10 @@ import CircularBase from './src/Screens/ComplexUI/CircularBase';
 import MultiColors from './src/Screens/ComplexUI/MultiColors';
 import WalkThrough from './src/Screens/Onboard/WalkThrough';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import InAppSubscription from './src/Screens/InAppSubscription';
+import Layout from './src/Screens/Layout';
+import Time from './src/Screens/Time';
+import HeaderScroll from './src/Screens/HeaderScroll';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,11 +36,22 @@ const App = () => {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      // Alert.alert('Notification in foreground!', JSON.stringify(remoteMessage));
+      Alert.alert('Notification in foreground!', JSON.stringify(remoteMessage));
     });
 
     return unsubscribe;
   }, []);
+
+  // useEffect(() => {
+  //   GoogleSignin.configure({
+  //     webClientId:
+  //       // '1099321872447-gqvrk0h8i5h5ouekkkba6smesvu8bv1c.apps.googleusercontent.com', //google
+
+  //       '1099321872447-pk1206646tcpaqg0vt8i31i0fn363e3n.apps.googleusercontent.com', //playconsole
+
+  //     // ' 1099321872447-tootemei1akfvif4gdpd2ahn6p26kmnh.apps.googleusercontent.com', //oAuth
+  //   });
+  // }, []);
 
   useEffect(() => {
     async function setData() {
@@ -179,6 +194,43 @@ const App = () => {
             options={{
               animationTypeForReplace: 'push',
               animation: 'slide_from_right',
+            }}
+          />
+          <Stack.Screen
+            name="InApp"
+            component={InAppSubscription}
+            options={{
+              animationTypeForReplace: 'push',
+              animation: 'slide_from_right',
+            }}
+          />
+          <Stack.Screen
+            name="Time"
+            component={Time}
+            options={{
+              animationTypeForReplace: 'push',
+              animation: 'slide_from_right',
+            }}
+          />
+          <Stack.Screen
+            name="HeaderScroll"
+            component={HeaderScroll}
+            options={{
+              animationTypeForReplace: 'push',
+              animation: 'slide_from_right',
+            }}
+          />
+          <Stack.Screen
+            name="Layout"
+            component={Layout}
+            options={{
+              animationTypeForReplace: 'push',
+              animation: 'slide_from_right',
+              // headerRight: () => (
+              //   <TouchableOpacity>
+              //     <Text style={{color: 'black'}}>Logout</Text>
+              //   </TouchableOpacity>
+              // ),
             }}
           />
         </Stack.Navigator>
