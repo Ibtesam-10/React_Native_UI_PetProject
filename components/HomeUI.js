@@ -11,12 +11,16 @@ import {
   FlatList,
   TouchableOpacity,
   ImageBackground,
+  Alert,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {
   car1,
   car2,
   eye,
+  graph,
+  home,
   img1,
   img2,
   img3,
@@ -25,17 +29,22 @@ import {
   tick,
 } from '../src/assets/images';
 
-import {useNavigation} from '@react-navigation/native';
-import {Animated} from 'react-native';
 import {useRef} from 'react';
-import {Neomorph} from 'react-native-neomorph-shadows';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import auth from '@react-native-firebase/auth';
 import Header from './Header';
+import {Animated} from 'react-native';
+import auth from '@react-native-firebase/auth';
+import {useNavigation} from '@react-navigation/native';
+import {Neomorph} from 'react-native-neomorph-shadows';
+import Swipelist from 'react-native-swipeable-list-view';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import PagerView from 'react-native-pager-view';
+
+const Drawer = createDrawerNavigator();
 
 const screenWidth = Dimensions.get('window').width;
 
-const HomeUI = () => {
+const HomeUI = ({route}) => {
   const [activeSlide, setActiveSlide] = useState(0);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -43,7 +52,6 @@ const HomeUI = () => {
 
   const navigation = useNavigation();
   const fadeAnimation = useRef(new Animated.Value(1)).current;
-
   const onRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -76,6 +84,9 @@ const HomeUI = () => {
       imageUrl: img1,
     },
   ];
+
+  // const {user} = route?.params || {};
+  // console.log('UserhOMEui=>>>>>>>>>', user);
 
   const iconsData = [
     {imageUrl: img1, label: 'Icon 1'},
@@ -117,6 +128,17 @@ const HomeUI = () => {
     {imageUrl: car2, label: 'item 14'},
     {imageUrl: img1, label: 'item 15'},
     {imageUrl: img3, label: 'item 16'},
+  ];
+  const swipeData = [
+    {
+      name: 'Javascript',
+    },
+    {
+      name: 'React Native',
+    },
+    {
+      name: 'Swift',
+    },
   ];
 
   const handleOnPress = item => () => {
@@ -300,6 +322,26 @@ const HomeUI = () => {
           tintColor="transparent"
         />
       }>
+      {/* <Text
+        style={{
+          color: 'black',
+          fontSize: 20,
+          backgroundColor: '#fff',
+          paddingTop: 20,
+          marginLeft: 20,
+        }}>
+        {user?.name}
+      </Text>
+      <Text
+        style={{
+          color: 'black',
+          fontSize: 20,
+          backgroundColor: '#fff',
+          paddingTop: 20,
+          marginLeft: 20,
+        }}>
+        {user?.email}
+      </Text> */}
       <View style={styles.sectionContainer}>
         <TouchableOpacity onPress={handleLogoutPress}>
           <Neomorph
@@ -335,7 +377,12 @@ const HomeUI = () => {
         </View>
         <View style={styles.textStyle}>
           <Text style={styles.textAlign}>Recommended</Text>
-          <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Time');
+            }}>
+            <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
+          </TouchableOpacity>
         </View>
         <FlatList
           data={iconsData}
@@ -347,7 +394,12 @@ const HomeUI = () => {
         />
         <View style={styles.textStyle}>
           <Text style={[styles.textAlign]}>Categories</Text>
-          <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Layout');
+            }}>
+            <Text style={[styles.textAlign, styles.seeAll]}>View All</Text>
+          </TouchableOpacity>
         </View>
         <FlatList
           data={categoriesData}
@@ -371,6 +423,31 @@ const HomeUI = () => {
         keyExtractor={item => item.id}
         numColumns={2}
       />
+      <Swipelist
+        data={swipeData}
+        swipeableProps={{
+          enabled: true,
+        }}
+        renderRightItem={(data, index) => (
+          <View key={index} style={styles.swipecontainer}>
+            <Text style={{color: 'black'}}>
+              {index + 1}. {data.name}
+            </Text>
+          </View>
+        )}
+        renderHiddenItem={(data, index) => (
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity
+              style={[styles.rightAction, {backgroundColor: '#F2637E'}]}
+              onPress={() => {
+                Alert('ghhghg');
+              }}>
+              <Image source={home} style={{width: 25, height: 25}} />
+            </TouchableOpacity>
+          </View>
+        )}
+        rightOpenValue={200}
+      />
     </ScrollView>
   );
 };
@@ -390,6 +467,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flexGrow: 1,
+    backgroundColor: '#fff',
     // backgroundColor: '#ffffff',
   },
   item: {
@@ -528,6 +606,7 @@ const styles = StyleSheet.create({
   textStyle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: '#fff',
   },
   row: {
     justifyContent: 'space-evenly',
@@ -578,6 +657,42 @@ const styles = StyleSheet.create({
   grdiViewListStyle: {
     marginBottom: 20,
     alignSelf: 'center',
+  },
+  rightAction: {
+    marginVertical: 10,
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    height: 60,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderRadius: 8,
+  },
+  swipecontainer: {
+    height: 60,
+    marginVertical: 10,
+    backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    paddingLeft: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderRadius: 8,
+    width: '90%',
+    alignSelf: 'center',
+    borderColor: '#E9E6E6',
+    borderWidth: 1,
   },
 });
 export default HomeUI;

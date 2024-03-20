@@ -17,7 +17,9 @@ import BottomTab from '../src/Screens/BottomTab';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeUI from './HomeUI';
 import {eye, menu} from '../src/assets/images';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, DrawerActions} from '@react-navigation/native';
+import HeaderScroll from '../src/Screens/HeaderScroll';
+import TrashCardScreen from '../src/Screens/TrashCardScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -30,6 +32,7 @@ const AnimatedScreen = ({route}) => {
     {key: 'third', title: 'Third'},
   ]);
   const Tab = createBottomTabNavigator();
+  const navigation = useNavigation();
 
   const FirstRoute = () => (
     <View style={styles.container}>
@@ -70,8 +73,6 @@ const AnimatedScreen = ({route}) => {
   const dimensions = useWindowDimensions();
 
   const isLargeScreen = dimensions.width >= 768;
-  const navigation = useNavigation();
-
   const renderScene = SceneMap({
     first: FirstRoute,
     second: SecondRoute,
@@ -106,11 +107,9 @@ const AnimatedScreen = ({route}) => {
         options={{
           drawerLabel: 'Home',
           headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Image
-                source={menu}
-                style={{width: 25, height: 25, marginLeft: 10}}
-              />
+            <TouchableOpacity
+              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+              <Image source={menu} style={styles.menuIconStyle} />
             </TouchableOpacity>
           ),
         }}
@@ -124,6 +123,16 @@ const AnimatedScreen = ({route}) => {
         name="PagerView"
         component={ThirdRoute}
         options={{drawerLabel: 'PagerView'}}
+      />
+      <Drawer.Screen
+        name="HeaderScroll"
+        component={HeaderScroll}
+        options={{drawerLabel: 'HeaderScroll'}}
+      />
+      <Drawer.Screen
+        name="TrashCardScreen"
+        component={TrashCardScreen}
+        options={{drawerLabel: 'TrashCardScreen'}}
       />
     </Drawer.Navigator>
   );
@@ -159,6 +168,11 @@ const styles = StyleSheet.create({
   indicatorStyle: {
     backgroundColor: 'red',
     marginBottom: -2,
+  },
+  menuIconStyle: {
+    width: 25,
+    height: 25,
+    marginLeft: 10,
   },
 });
 

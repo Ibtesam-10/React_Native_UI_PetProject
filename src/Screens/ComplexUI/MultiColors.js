@@ -164,7 +164,7 @@ const MultiColors = () => {
               )}
               customBody={() => (
                 <View style={styles.cutomBody}>
-                  <Text>{item.body}</Text>
+                  <Text style={{color: 'black'}}>{item.body}</Text>
                 </View>
               )}
               // defaultOpenIndices={[0, 2]}
